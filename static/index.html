@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMIT Agent — LangGraph Multi-Agent Assistant</title>
+  
+  <!-- Modern Typography (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  
+  <!-- Markdown Renderer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body class="light-theme">
+  <div class="app-layout">
+    
+    <!-- ========================================================================= -->
+    <!-- 1. TOP HEADER                                                             -->
+    <!-- ========================================================================= -->
+    <header class="top-navbar">
+      <div class="brand-group">
+        <div class="brand-icon">
+          <span>✦</span>
+        </div>
+        <div class="brand-meta">
+          <h1 class="brand-title">SMIT Agent</h1>
+          <span class="brand-subtitle">Your AI Assistant • RAG • GitHub • MCP • Gmail • Calendar</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="system-status-pill">
+          <span class="pulse-dot"></span>
+          <span class="status-text"><strong>Online</strong> &nbsp;|&nbsp; Build • Automate • Get Things Done</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Theme Toggle -->
+        <button id="themeToggleBtn" class="icon-btn" title="Toggle Theme" aria-label="Toggle Light/Dark Theme">
+          <span id="themeIcon">🌙</span>
+        </button>
+
+        <!-- User Profile Pill -->
+        <div class="user-pill">
+          <div class="avatar-circle">FH</div>
+          <div class="user-details">
+            <span class="user-name">Fazal Hussain</span>
+            <span class="user-role">Agent User</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========================================================================= -->
+    <!-- 2. MAIN THREE-COLUMN WORKSPACE                                            -->
+    <!-- ========================================================================= -->
+    <div class="main-body">
+      
+      <!-- LEFT SIDEBAR: Navigation & Toolkit Links -->
+      <aside class="left-sidebar">
+        <nav class="sidebar-nav">
+          <button class="nav-item active" data-tab="chat">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Chat</span>
+          </button>
+          
+          <button class="nav-item" data-tab="tools" data-prompt="List all tools available in RAG, GitHub MCP, and Google Workspace">
+            <span class="nav-icon">🧰</span>
+            <span class="nav-label">Tools</span>
+          </button>
+          
+          <button class="nav-item" data-tab="github" data-prompt="Tell me about the repository octocat/Hello-World and its recent commits.">
+            <span class="nav-icon">🐙</span>
+            <span class="nav-label">GitHub</span>
+          </button>
+          
+          <button class="nav-item" data-tab="calendar" data-prompt="Show my Google Calendar meetings and upcoming events.">
+            <span class="nav-icon">📅</span>
+            <span class="nav-label">Calendar</span>
+          </button>
+          
+          <button class="nav-item" data-tab="gmail" data-prompt="What Gmail capabilities do you have? Can you send emails and save drafts?">
+            <span class="nav-icon">✉️</span>
+            <span class="nav-label">Gmail</span>
+          </button>
+          
+          <button class="nav-item" data-tab="rag" data-prompt="According to the Agentic AI roadmap PDF, what are the core components of an AI Agent?">
+            <span class="nav-icon">📖</span>
+            <span class="nav-label">Knowledge Base (RAG)</span>
+          </button>
+          
+          <button class="nav-item" data-tab="settings">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-label">Settings</span>
+          </button>
+        </nav>
+
+        <!-- Backend Footer Card -->
+        <div class="sidebar-footer-card">
+          <div class="footer-card-header">
+            <span class="brain-emoji">🧠</span>
+            <span class="badge-fastapi">v1.0.0</span>
+          </div>
+          <div class="footer-card-body">
+            <span class="footer-title">⚡ FastAPI Backend</span>
+            <span class="footer-sub">LangGraph Orchestrator</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTER: Chat Conversation Stream -->
+      <main class="chat-viewport">
+        
+        <!-- Messages Container -->
+        <div id="messagesContainer" class="messages-container">
+          <!-- Initial Welcome Card -->
+          <div class="welcome-card" id="welcomeCard">
+            <div class="welcome-icon">✦</div>
+            <h2>Welcome to SMIT LangGraph Multi-Agent Assistant</h2>
+            <p>Your unified workspace connecting <strong>Hosted Pinecone RAG</strong>, <strong>GitHub MCP</strong>, and <strong>Google Workspace (Calendar & Gmail)</strong>.</p>
+            
+            <div class="quick-examples">
+              <button class="example-chip" onclick="fillPrompt('What does the Agentic AI roadmap PDF say about Transformer models?')">
+                📖 Ask RAG about PDF Roadmap
+              </button>
+              <button class="example-chip" onclick="fillPrompt('Inspect octocat/Hello-World repo and list its recent commits.')">
+                🐙 Inspect GitHub Repository
+              </button>
+              <button class="example-chip" onclick="fillPrompt('Check my Google Calendar meetings for today.')">
+                📅 View Calendar Events
+              </button>
+              <button class="example-chip" onclick="fillPrompt('Write a draft email in Gmail to test@example.com about project status.')">
+                ✉️ Create Gmail Draft
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Chat Input Area -->
+        <div class="chat-input-wrapper">
+          
+          <!-- Category Quick Chips -->
+          <div class="query-category-bar">
+            <button class="cat-chip" onclick="fillPrompt('Search for top agentic AI repos on GitHub')">
+              <span>🌐 Web / GitHub</span>
+            </button>
+            <button class="cat-chip" onclick="fillPrompt('What are the key learning steps in the Agentic AI PDF?')">
+              <span>📖 RAG</span>
+            </button>
+            <button class="cat-chip" onclick="fillPrompt('Tell me about octocat/Hello-World')">
+              <span>🐙 GitHub</span>
+            </button>
+            <button class="cat-chip" onclick="fillPrompt('Create a draft email to friend@gmail.com saying hello')">
+              <span>✉️ Gmail</span>
+            </button>
+            <button class="cat-chip" onclick="fillPrompt('Show all my calendars and which one is primary')">
+              <span>📅 Calendar</span>
+            </button>
+          </div>
+
+          <!-- Input Bar -->
+          <form id="chatForm" class="input-form">
+            <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;" />
+            <button type="button" id="btnAttach" class="btn-attach" title="Upload & Index PDF document into RAG" aria-label="Attachment">
+              <span>📎</span>
+            </button>
+
+            <textarea
+              id="messageInput"
+              rows="1"
+              placeholder="Type your message... (e.g. search GitHub, send email, check calendar)"
+              required
+            ></textarea>
+
+            <button type="submit" id="sendBtn" class="btn-send" title="Send Message" aria-label="Send">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </form>
+
+        </div>
+      </main>
+
+      <!-- RIGHT SIDEBAR: Tools Status & Activity Feed -->
+      <aside class="right-sidebar">
+        
+        <!-- Section 1: Tools Status -->
+        <section class="sidebar-section">
+          <div class="section-header">
+            <span class="status-indicator-dot"></span>
+            <h3>Tools Status</h3>
+          </div>
+          
+          <div class="tools-list" id="toolsList">
+            <!-- RAG Tool Card -->
+            <div class="tool-card" id="status-rag">
+              <div class="tool-info">
+                <span class="tool-icon">📖</span>
+                <div class="tool-meta">
+                  <span class="tool-name">RAG (Knowledge Base)</span>
+                  <span class="tool-detail">Pinecone Serverless</span>
+                </div>
+              </div>
+              <span class="status-badge connected">Connected</span>
+            </div>
+
+            <!-- GitHub Tool Card -->
+            <div class="tool-card" id="status-github">
+              <div class="tool-info">
+                <span class="tool-icon">🐙</span>
+                <div class="tool-meta">
+                  <span class="tool-name">GitHub</span>
+                  <span class="tool-detail">MCP Stdio Protocol</span>
+                </div>
+              </div>
+              <span class="status-badge connected">Connected</span>
+            </div>
+
+            <!-- MCP External Tools Card -->
+            <div class="tool-card" id="status-mcp">
+              <div class="tool-info">
+                <span class="tool-icon">⚙️</span>
+                <div class="tool-meta">
+                  <span class="tool-name">MCP (External Tools)</span>
+                  <span class="tool-detail">Multi-Server Client</span>
+                </div>
+              </div>
+              <span class="status-badge connected">Connected</span>
+            </div>
+
+            <!-- Gmail API Card -->
+            <div class="tool-card" id="status-gmail">
+              <div class="tool-info">
+                <span class="tool-icon">✉️</span>
+                <div class="tool-meta">
+                  <span class="tool-name">Gmail API</span>
+                  <span class="tool-detail">Composio OAuth</span>
+                </div>
+              </div>
+              <span class="status-badge connected">Connected</span>
+            </div>
+
+            <!-- Google Calendar API Card -->
+            <div class="tool-card" id="status-calendar">
+              <div class="tool-info">
+                <span class="tool-icon">📅</span>
+                <div class="tool-meta">
+                  <span class="tool-name">Google Calendar API</span>
+                  <span class="tool-detail">Multi-Calendar Active</span>
+                </div>
+              </div>
+              <span class="status-badge connected">Connected</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 2: Recent Activity -->
+        <section class="sidebar-section">
+          <div class="section-header">
+            <span class="clock-icon">🕒</span>
+            <h3>Recent Activity</h3>
+          </div>
+
+          <div class="activity-feed" id="activityFeed">
+            <!-- Dynamically populated from /api/activity -->
+            <div class="activity-item">
+              <div class="activity-icon-wrap email">✉️</div>
+              <div class="activity-content">
+                <div class="activity-title">Email Assistant Action</div>
+                <div class="activity-desc">Connected accounts verified via Composio</div>
+                <div class="activity-time">Just now</div>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon-wrap github">🐙</div>
+              <div class="activity-content">
+                <div class="activity-title">GitHub MCP Action</div>
+                <div class="activity-desc">Initialized stdio protocol with PAT</div>
+                <div class="activity-time">Just now</div>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon-wrap rag">📖</div>
+              <div class="activity-content">
+                <div class="activity-title">RAG Knowledge Base Action</div>
+                <div class="activity-desc">Pinecone Serverless 70 chunks loaded</div>
+                <div class="activity-time">Just now</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- Modal for Tab Details (Tools / Settings) -->
+  <div id="infoModal" class="modal-backdrop hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Modal Title</h3>
+        <button id="modalCloseBtn" class="btn-close">&times;</button>
+      </div>
+      <div id="modalBody" class="modal-body">
+        Modal content goes here.
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Application Logic -->
+  <script src="/static/app.js"></script>
+</body>
+</html>

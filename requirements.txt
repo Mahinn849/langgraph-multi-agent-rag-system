@@ -1,0 +1,26 @@
+# Core LangChain & LangGraph Framework
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+langgraph>=0.2.0
+
+# LLM & Embeddings Provider
+langchain-openai>=0.2.0
+
+# Document Ingestion & Chunking for RAG
+pypdf>=5.0.0
+
+# Hosted Vector Store
+langchain-pinecone>=0.2.0
+pinecone>=5.0.0
+
+# Model Context Protocol (MCP) Client & Tool Adapters
+mcp>=1.0.0
+langchain-mcp-adapters>=0.1.0
+
+# Composio Integration for Google Calendar MCP Sub-Agent
+composio-core
+composio-langchain
+
+# Environment Configuration
+python-dotenv>=1.0.0
